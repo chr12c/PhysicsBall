@@ -12,13 +12,11 @@ public class Main extends Application {
   public void start(Stage stage) {
 
     MainView mainView = new MainView();
-    MainLogic mainLogic = new MainLogic(mainView.getBall());
+    MainLogic mainLogic = new MainLogic(mainView);
 
     stage.setTitle("mover");
     stage.setScene(mainView.getScene());
     stage.show();
-    
-    mainLogic.playTimeline();
 
   }
 

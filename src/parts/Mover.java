@@ -2,15 +2,21 @@ package parts;
 
 import parts.Vector;
 
-public class Mover {
-  //hard code constants for demo. Mimicks dimensions of MainView components
-  private static final int WIDTH = 300;
-  private static final int HEIGHT = 300;
-  private static final int RADIUS = 10;
+import javafx.scene.paint.Color;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.shape.Circle;
+
+public class Mover extends Region {
+
+  private Circle ball;
+  private double ballRadius = 10;
 
   private Vector location;
   private Vector velocity;
   private Vector acceleration;
+
+  private double maxSpeed = 20;
 
   public Mover(Vector location, Vector velocity) {
     this.location = location;
@@ -18,9 +24,15 @@ public class Mover {
   }
 
   public Mover(Vector location, Vector velocity, Vector acceleration) {
+    ball = new Circle(ballRadius, Color.LAWNGREEN);
+    ball.setCenterX(ballRadius);
+    ball.setCenterY(ballRadius);
+
     this.location = location;
     this.velocity = velocity;
     this.acceleration = acceleration;
+
+    this.getChildren().add(ball);
   }
 
   public Vector getLocation() {
@@ -41,18 +53,37 @@ public class Mover {
 
   public void update() {
     velocity.add(acceleration);
+    velocity.limit(maxSpeed);
     location.add(velocity);
+    acceleration.mult(0);//remove acceleration
   }
 
+  //hard code the pane HEIGHT & WIDTH for now
   public void checkEdges() {
-    if (location.getX() <= 0 + RADIUS ||
-        location.getX() >= WIDTH - RADIUS) {
+    if (location.getX() < 0 + ballRadius) {
       velocity.setX(-velocity.getX());
+      location.setX(0 + ballRadius);
+    } else if (location.getX() > 300 + ballRadius) {
+      velocity.setX(-velocity.getX());
+      location.setX(300 - ballRadius);
     }
 
-    if (location.getY() >= HEIGHT - RADIUS ||
-        location.getY() <= 0 + RADIUS) {
+    if (location.getY() > 300 - ballRadius) {
+      location.setY(300 - ballRadius);
       velocity.setY(-velocity.getY());
+    } else if (location.getY() < 0 + ballRadius) {
+      velocity.setY(-velocity.getY());
+      location.setY(0 + ballRadius);
     }
   }
+
+  public void display() {
+    relocate(location.getX() - ballRadius, location.getY() - ballRadius);
+    /*these are all the same in context of a Pane*/
+    //setLayoutX(location.getX() - ballRadius);
+    //setLayoutY(location.getY() - ballRadius);
+    //setTranslateX(location.getX() - ballRadius);
+    //setTranslateY(location.getY() - ballRadius);
+  }
+
 }

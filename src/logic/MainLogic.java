@@ -2,43 +2,42 @@ package logic;
 
 import parts.Mover;
 import parts.Vector;
+import view.MainView;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.shape.Circle;
+import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
 
 public class MainLogic {
 
+  private MainView mainView;
   private Mover mover;
-  private Circle ball;
 
-  public MainLogic(Circle circle) {
-    this.ball = circle;
-    this.mover = new Mover(new Vector(ball.getLayoutX(), ball.getLayoutY()),
+  public MainLogic(MainView mainView) {
+    this.mainView = mainView;
+
+    Vector location = new Vector(mainView.getRoot().getWidth() / 2,
+                                 mainView.getRoot().getHeight() / 2);
+    
+    this.mover = new Mover(location,
                            new Vector(0, 0),
-                           new Vector(-0.001, 0.005));
+                           new Vector(-0.2, 0.7));
+
+    this.mainView.getRoot().getChildren().add(this.mover);
+    this.mover.display();                       
+
+    play();
   }
 
-  public void playTimeline() {
-    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20),
-      new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent t) {
-          mover.update();
-          ball.setLayoutX(mover.getLocation().getX());
-          ball.setLayoutY(mover.getLocation().getY());
-
-          System.out.println(mover.getLocation().getX() + " , " + mover.getLocation().getY());
-
-          mover.checkEdges();
-        }
+  private void play() {
+    new AnimationTimer() {
+      @Override
+      public void handle(long now) {
+        mover.update();
+        System.out.println(mover.getLocation().getX() + " " + mover.getLocation().getY());
+        mover.checkEdges();
+        mover.display();
       }
-    ));
-    timeline.setCycleCount(Timeline.INDEFINITE);
-    timeline.play();
+    }.start();
   }
+
 }

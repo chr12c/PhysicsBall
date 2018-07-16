@@ -13,11 +13,11 @@ public class Vector {
   }
 
   public double getX() {
-    return this.x;
+    return x;
   }
 
   public double getY() {
-    return this.y;
+    return y;
   }
 
   public void setX(double x) {
@@ -39,30 +39,28 @@ public class Vector {
   }
 
   public void mult(double d) {
-    this.x *= d;
-    this.y *= d;
+    x *= d;
+    y *= d;
   }
 
   public void div(double d) {
-    this.x /= d;
-    this.y /= d;
+    x /= d;
+    y /= d;
   }
 
   public double mag() {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
+    return Math.sqrt(x * x + y * y);
   }
 
   public void normalize() {
     this.div(this.mag());
   }
 
-  //randoms a length 1 vector
-  public void random2D() {
-    Random r = new Random();
-
-    this.x = r.nextDouble();
-    this.y = r.nextDouble();
-    this.normalize();
+  //limit magnitude
+  public void limit(double max) {
+    if (mag() > max) {
+      normalize();
+      mult(max);
+    }
   }
-
 }
