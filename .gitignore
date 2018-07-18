@@ -24,3 +24,6 @@ hs_err_pid*
 
 #swap files
 *.swp
+
+#misc files
+sources.txt
