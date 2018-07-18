@@ -1,7 +1,5 @@
 package view;
 
-import parts.Mover;
-
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.Scene;
@@ -19,7 +17,6 @@ public class MainView {
     this.root.setStyle("-fx-background-color: black;");
 
     this.scene = new Scene(root, WIDTH, HEIGHT);
-
   }
 
   public Pane getRoot() {

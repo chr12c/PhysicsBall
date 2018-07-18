@@ -9,22 +9,30 @@ import javafx.scene.shape.Circle;
 
 public class Mover extends Region {
 
+  private double mass;
+  private double ballRadius;
   private Circle ball;
-  private double ballRadius = 10;
 
   private Vector location;
   private Vector velocity;
   private Vector acceleration;
 
-  private double maxSpeed = 20;
+  private double maxSpeed = 5;
 
   public Mover(Vector location, Vector velocity) {
+    this.mass = 1;
+    this.ballRadius = 8 * mass;
     this.location = location;
     this.velocity = velocity;
   }
 
-  public Mover(Vector location, Vector velocity, Vector acceleration) {
-    ball = new Circle(ballRadius, Color.LAWNGREEN);
+  public Mover(double mass, Vector location, Vector velocity, Vector acceleration) {
+    this.mass = mass;
+    this.ballRadius = 8 * mass;
+
+    ball = new Circle(ballRadius, Color.GREEN);
+    ball.setStroke(Color.LAWNGREEN);
+    ball.setStrokeWidth(3);
     ball.setCenterX(ballRadius);
     ball.setCenterY(ballRadius);
 
@@ -33,6 +41,10 @@ public class Mover extends Region {
     this.acceleration = acceleration;
 
     this.getChildren().add(ball);
+  }
+
+  public double getMass() {
+    return this.mass;
   }
 
   public Vector getLocation() {
@@ -51,39 +63,39 @@ public class Mover extends Region {
     this.velocity = velocity;
   }
 
+  public void applyForce(Vector force) {
+    acceleration.add(Vector.div(force, mass));
+  }
+
   public void update() {
     velocity.add(acceleration);
     velocity.limit(maxSpeed);
     location.add(velocity);
-    acceleration.mult(0);//remove acceleration
+    acceleration.mult(0);//remove acceleration to prevent incorrect accumulation
   }
 
   //hard code the pane HEIGHT & WIDTH for now
+  //TODO edge of window exerts equal and opposite force on Mover during collision 
   public void checkEdges() {
     if (location.getX() < 0 + ballRadius) {
-      velocity.setX(-velocity.getX());
       location.setX(0 + ballRadius);
-    } else if (location.getX() > 300 + ballRadius) {
       velocity.setX(-velocity.getX());
+    } else if (location.getX() > 300 + ballRadius) {
       location.setX(300 - ballRadius);
+      velocity.setX(-velocity.getX());
     }
 
     if (location.getY() > 300 - ballRadius) {
       location.setY(300 - ballRadius);
       velocity.setY(-velocity.getY());
     } else if (location.getY() < 0 + ballRadius) {
-      velocity.setY(-velocity.getY());
       location.setY(0 + ballRadius);
+      velocity.setY(-velocity.getY());
     }
   }
 
   public void display() {
     relocate(location.getX() - ballRadius, location.getY() - ballRadius);
-    /*these are all the same in context of a Pane*/
-    //setLayoutX(location.getX() - ballRadius);
-    //setLayoutY(location.getY() - ballRadius);
-    //setTranslateX(location.getX() - ballRadius);
-    //setTranslateY(location.getY() - ballRadius);
   }
 
 }
