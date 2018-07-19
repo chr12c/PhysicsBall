@@ -30,8 +30,8 @@ public class Mover extends Region {
     this.mass = mass;
     this.ballRadius = 8 * mass;
 
-    ball = new Circle(ballRadius, Color.GREEN);
-    ball.setStroke(Color.LAWNGREEN);
+    ball = new Circle(ballRadius, Color.web("#1F7A8C"));
+    ball.setStroke(Color.web("#F4E9CD"));
     ball.setStrokeWidth(3);
     ball.setCenterX(ballRadius);
     ball.setCenterY(ballRadius);
@@ -45,6 +45,10 @@ public class Mover extends Region {
 
   public double getMass() {
     return this.mass;
+  }
+
+  public Circle getBall() {
+    return this.ball;
   }
 
   public Vector getLocation() {

@@ -11,14 +11,14 @@ import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public class MainLogic {
 
   private MainView mainView;
-
   private List<Mover> movers;
-
   private Vector mouse = new Vector(0, 0);
+  private boolean isFollowMouse;
 
   public MainLogic(MainView mainView) {
     this.mainView = mainView;
@@ -41,59 +41,53 @@ public class MainLogic {
       mover.display();
     }
 
-    mainView.getRoot().setOnMouseMoved(me -> {
+    mainView.getRoot().setOnMouseDragged(me -> {
+      isFollowMouse = true;
       System.out.println(me.getX() + ", " + me.getY());
       mouse.setX(me.getX());
       mouse.setY(me.getY());
+
+      mainView.getRoot().setOnMouseReleased(me2 -> {
+        isFollowMouse = false;
+      });
     });
 
-    //playMouseAttraction();
-    playGravity();
+    play();
   }
 
-  private void playMouseAttraction() {
-    new AnimationTimer() {
-      @Override
-      public void handle(long now) {
-
-        for (Mover mover : movers) {
-          //compute vector representing force of attraction between ball and mouse
-          Vector ballToMouse = Vector.sub(mouse, mover.getLocation());
-          /*set attraction proportional to distance between ball and mouse. 
-            And inversely proportional to ball mass*/
-          double mouseForceDistanceFactor = ((0.005 * ballToMouse.mag()) / mover.getMass());
-          ballToMouse.normalize();
-          ballToMouse.mult(mouseForceDistanceFactor);
-          mover.applyForce(ballToMouse);
-
-          mover.update();
-          mover.checkEdges();
-          mover.display();
-        }
-      }
-    }.start();
-  }
-
-  private void playGravity() {
+  private void play() {
     new AnimationTimer() {
       @Override
       public void handle(long now) {
 
         for (Mover mover : movers) {
           //Force of gravity on ball proportional to mass
-          Vector gravity = new Vector(0, 0.04 * mover.getMass());
+          Vector gravity = new Vector(0, 0.03 * mover.getMass());
+
+          if (isFollowMouse) {
+            mover.getBall().setFill(Color.web("#77aca2"));
+
+            //compute vector representing force of attraction between ball and mouse
+            Vector ballToMouse = Vector.sub(mouse, mover.getLocation());
+
+            /*set attraction proportional to distance between ball and mouse. 
+              And inversely proportional to ball mass*/
+            double mouseForceDistanceFactor = ((0.005 * ballToMouse.mag()) / mover.getMass());
+            ballToMouse.normalize();
+            ballToMouse.mult(mouseForceDistanceFactor);
+            mover.applyForce(ballToMouse);
+          } else {
+            mover.getBall().setFill(Color.web("#1F7A8C"));
+          }
 
           mover.applyForce(gravity);
 
           mover.update();
           mover.checkEdges(0.8);
-          //mover.checkEdges();
           mover.display();
         }
       }
     }.start();
   }
-
-
 
 }
