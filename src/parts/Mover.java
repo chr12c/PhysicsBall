@@ -75,12 +75,11 @@ public class Mover extends Region {
   }
 
   //hard code the pane HEIGHT & WIDTH for now
-  //TODO edge of window exerts equal and opposite force on Mover during collision 
   public void checkEdges() {
     if (location.getX() < 0 + ballRadius) {
       location.setX(0 + ballRadius);
       velocity.setX(-velocity.getX());
-    } else if (location.getX() > 300 + ballRadius) {
+    } else if (location.getX() > 300 - ballRadius) {
       location.setX(300 - ballRadius);
       velocity.setX(-velocity.getX());
     }
@@ -91,6 +90,25 @@ public class Mover extends Region {
     } else if (location.getY() < 0 + ballRadius) {
       location.setY(0 + ballRadius);
       velocity.setY(-velocity.getY());
+    }
+  }
+
+  //coefficient of friction on window edges
+  public void checkEdges(double coeff) {
+    if (location.getX() < 0 + ballRadius) {
+      location.setX(0 + ballRadius);
+      velocity.setX(-velocity.getX() * coeff);
+    } else if (location.getX() > 300 - ballRadius) {
+      location.setX(300 - ballRadius);
+      velocity.setX(-velocity.getX() * coeff);
+    }
+
+    if (location.getY() > 300 - ballRadius) {
+      location.setY(300 - ballRadius);
+      velocity.setY(-velocity.getY() * coeff);
+    } else if (location.getY() < 0 + ballRadius) {
+      location.setY(0 + ballRadius);
+      velocity.setY(-velocity.getY() * coeff);
     }
   }
 

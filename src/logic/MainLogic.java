@@ -47,8 +47,8 @@ public class MainLogic {
       mouse.setY(me.getY());
     });
 
-    playMouseAttraction();
-    //playGravity();
+    //playMouseAttraction();
+    playGravity();
   }
 
   private void playMouseAttraction() {
@@ -86,11 +86,14 @@ public class MainLogic {
           mover.applyForce(gravity);
 
           mover.update();
-          mover.checkEdges();
+          mover.checkEdges(0.8);
+          //mover.checkEdges();
           mover.display();
         }
       }
     }.start();
   }
+
+
 
 }

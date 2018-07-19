@@ -54,6 +54,10 @@ public class Vector {
     y *= d;
   }
 
+  public static Vector mult(Vector vec, double d) {
+    return new Vector(vec.x * d, vec.y * d);
+  }
+
   public void div(double d) {
     x /= d;
     y /= d;
