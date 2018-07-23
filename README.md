@@ -1,5 +1,5 @@
 # Physics Ball
-Demonstrates the use of vectors to simulate motion of ball objects (with a given mass that scales linearly with radius) under various forces.
+Demonstrating the use of vectors to simulate motion of ball objects (with a given mass that scales linearly with radius) under various forces.
 
 ![PhysicsBallDemo](https://raw.githubusercontent.com/chriszq/PhysicsBall/assets/PhysicsBall_Demo.gif "Phyiscs Ball Demo")
 
